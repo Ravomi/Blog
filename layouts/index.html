@@ -9,8 +9,8 @@
   <a href="{{ .RelPermalink }}" rel="bookmark" title="{{ .Title }}" class="header-href">
     <article class="hentry">
       <h2 class="entry-title">
-        {{- if eq .Section "weekly" -}}第 {{ .Params.issue | default 1 }} 期 - {{- end -}}
-        {{ .Title }}
+        {{- if eq .Section "weekly" -}}第 {{ .Params.issue | default 1 }} 期 - {{ end -}}
+        {{- .Title -}}
       </h2>
       <div class="entry-content">
         <span>【{{ .Date.Format "2006-01-02" }}】</span>

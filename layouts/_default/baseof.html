@@ -24,8 +24,8 @@
 
   <link rel="preload" href="{{ "css/genjyuu.css" | relURL }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ "css/genjyuu.css" | relURL }}"></noscript>
-  {{- $css := resources.Get "css/main.css" | minify | fingerprint -}}
-  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  {{- $css := resources.Get "css/main.css" | minify -}}
+  <style>{{ $css.Content | safeCSS }}</style>
 </head>
 <body id="{{ block "body_id" . }}page{{ end }}" data-baseurl="{{ "" | relURL }}">
   {{ partial "header.html" . }}
