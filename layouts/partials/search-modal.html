@@ -1,0 +1,26 @@
+<div id="search-modal" class="search-modal" aria-hidden="true" role="dialog" aria-label="站内搜索">
+  <div class="search-container">
+    <div class="search-header">
+      <input
+        type="search"
+        id="search-input"
+        class="search-input"
+        placeholder="搜索文章或 Notes…"
+        aria-label="搜索文章或 Notes"
+        autocomplete="off"
+      >
+      <button class="search-close" id="search-close" type="button" aria-label="关闭搜索">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div id="search-results" class="search-results" role="listbox"></div>
+    <div class="search-footer">
+      <span><kbd>/</kbd> 搜索</span>
+      <span><kbd>↑↓</kbd> 选择</span>
+      <span><kbd>Enter</kbd> 打开</span>
+      <span><kbd>ESC</kbd> 关闭</span>
+    </div>
+  </div>
+</div>

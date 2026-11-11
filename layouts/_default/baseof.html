@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  {{- $desc := .Description | default (.Summary | plainify | truncate 120) | default .Site.Params.description -}}
+  <meta name="description" content="{{ $desc }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f4ed">
+  <meta name="author" content="{{ .Site.Params.author }}">
+
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+
+  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
+  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Feed" href="/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Notes" href="/notes/feed.xml">
+
+  <link rel="preconnect" href="https://gw.alipayobjects.com" crossorigin>
+  <link rel="preload" href="/css/jinkai.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/css/jinkai.css"></noscript>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body id="{{ block "body_id" . }}page{{ end }}">
+  {{ partial "header.html" . }}
+  {{ partial "banner.html" . }}
+
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  {{ partial "search-modal.html" . }}
+  {{ partial "footer.html" . }}
+
+  <div id="J_lightbox" class="lightbox-backdrop" aria-hidden="true">
+    <img id="J_lightbox_img" src="" alt="">
+  </div>
+
+  <script src="/js/site.js" defer></script>
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

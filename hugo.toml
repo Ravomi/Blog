@@ -1,0 +1,79 @@
+baseURL = "https://waya.ink/"
+languageCode = "zh-CN"
+defaultContentLanguage = "zh-cn"
+title = "Waya's Bakery"
+hasCJKLanguage = true
+enableRobotsTXT = true
+summaryLength = 120
+disableKinds = ["taxonomy", "term"]
+
+[pagination]
+  pagerSize = 10
+
+[permalinks]
+  posts = "/posts/:slug/"
+  notes = "/notes/:slug/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+    tabWidth = 2
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  section = ["HTML", "RSS"]
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediaType = "application/rss+xml"
+    baseName = "feed"
+
+[params]
+  author = "Waya"
+  description = "Waya's Bakery — 新鲜出炉的代码、思考与日常碎碎念。"
+  avatar = "/images/avatar.svg"
+  github = "https://github.com/Ravomi"
+  since = "2022"
+  mottoHome = "慢火烘焙，日日是好日"
+  mottoNotes = "人生到处知何似，应似飞鸿踏雪泥"
+  mottoPosts = "旧书不厌百回读，熟读深思子自知"
+  mottoAbout = "且将新火试新茶，诗酒趁年华"
+
+  [[params.noteCategories]]
+    key = "ai"
+    name = "AI"
+  [[params.noteCategories]]
+    key = "make"
+    name = "产品"
+  [[params.noteCategories]]
+    key = "code"
+    name = "代码"
+  [[params.noteCategories]]
+    key = "tools"
+    name = "工具"
+  [[params.noteCategories]]
+    key = "think"
+    name = "思考"
+  [[params.noteCategories]]
+    key = "life"
+    name = "生活"
+
+  [[params.postCategories]]
+    key = "engineering"
+    name = "工程"
+  [[params.postCategories]]
+    key = "ai"
+    name = "AI"
+  [[params.postCategories]]
+    key = "product"
+    name = "创作"
+  [[params.postCategories]]
+    key = "thought"
+    name = "思考"
+  [[params.postCategories]]
+    key = "life"
+    name = "生活"

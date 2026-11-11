@@ -1,0 +1,27 @@
+{{- $items := slice -}}
+{{- range .Site.RegularPages.ByDate.Reverse -}}
+  {{- $catKey := .Params.category | default "" -}}
+  {{- $catName := $catKey -}}
+  {{- if eq .Section "notes" -}}
+    {{- range $.Site.Params.noteCategories -}}
+      {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+    {{- end -}}
+  {{- else if eq .Section "posts" -}}
+    {{- range $.Site.Params.postCategories -}}
+      {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $title := .Title -}}
+  {{- if not $title -}}
+    {{- $title = (.Plain | htmlUnescape | strings.TrimSpace | truncate 42) -}}
+  {{- end -}}
+  {{- $items = $items | append (dict
+    "title" $title
+    "url" .RelPermalink
+    "section" .Section
+    "category" $catName
+    "date" (.Date.Format "2006-01-02")
+    "content" (.Plain | htmlUnescape | strings.TrimSpace | truncate 360)
+  ) -}}
+{{- end -}}
+{{- $items | jsonify -}}

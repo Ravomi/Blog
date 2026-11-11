@@ -1,0 +1,53 @@
+{{ define "body_id" }}post-index{{ end }}
+
+{{ define "main" }}
+<h1 class="visually-hidden">{{ .Site.Title }}</h1>
+
+{{- $notes := where .Site.RegularPages "Section" "notes" -}}
+{{- if gt (len $notes) 0 -}}
+<section class="home-notes-card" aria-label="最新碎碎念">
+  <div class="home-notes-head">
+    <h2>刚出炉的碎碎念</h2>
+    <a href="/notes/">查看全部 ({{ len $notes }}) →</a>
+  </div>
+  <div class="home-notes-items">
+    {{- range first 3 ($notes.ByDate.Reverse) -}}
+      {{- $catKey := .Params.category | default "think" -}}
+      {{- $catName := $catKey -}}
+      {{- range $.Site.Params.noteCategories -}}
+        {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+      {{- end -}}
+      <a class="home-note-row" href="{{ .RelPermalink }}">
+        <span class="home-note-meta">{{ .Date.Format "2006-01-02" }} · {{ $catName }}</span>
+        <span class="home-note-text">{{ .Plain | htmlUnescape | strings.TrimSpace | truncate 110 }}</span>
+      </a>
+    {{- end -}}
+  </div>
+</section>
+{{- end -}}
+
+{{- $posts := where .Site.RegularPages "Section" "posts" -}}
+{{- $paginator := .Paginate ($posts.ByDate.Reverse) -}}
+{{- range $paginator.Pages -}}
+  <a href="{{ .RelPermalink }}" rel="bookmark" title="{{ .Title }}" class="header-href">
+    <article class="hentry">
+      <h2 class="entry-title">{{ .Title }}</h2>
+      <div class="entry-excerpt">
+        <span class="excerpt-date">【{{ .Date.Format "2006-01-02" }}】</span>
+        {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 120 }}{{- end -}}
+      </div>
+    </article>
+  </a>
+{{- end -}}
+
+{{- if gt $paginator.TotalPages 1 -}}
+<nav class="pagination" aria-label="分页">
+  {{- if $paginator.HasPrev -}}
+    <a class="btn" href="{{ $paginator.Prev.URL }}">上一页</a>
+  {{- end -}}
+  {{- if $paginator.HasNext -}}
+    <a class="btn" href="{{ $paginator.Next.URL }}">下一页</a>
+  {{- end -}}
+</nav>
+{{- end -}}
+{{ end }}

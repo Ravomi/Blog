@@ -1,0 +1,97 @@
+{{- $page := .page -}}
+{{- $single := .single | default false -}}
+{{- $catKey := $page.Params.category | default "think" -}}
+{{- $catName := $catKey -}}
+{{- range $page.Site.Params.noteCategories -}}
+  {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+{{- end -}}
+{{- $images := $page.Params.images | default (slice) -}}
+{{- $plain := $page.Plain -}}
+{{- $isLong := gt (len (split $plain "")) 180 -}}
+{{- $types := slice -}}
+{{- if $isLong -}}{{- $types = $types | append "l" -}}{{- end -}}
+{{- if gt (len $images) 0 -}}{{- $types = $types | append "p" -}}{{- end -}}
+{{- if $page.Params.article -}}{{- $types = $types | append "a" -}}{{- end -}}
+{{- $likes := $page.Params.likes | default 0 -}}
+{{- $slug := $page.File.ContentBaseName -}}
+
+<article
+  class="note {{ if and (not $single) $page.Params.fold }}note-fold{{ end }}"
+  id="n-{{ $slug }}"
+  data-id="{{ $slug }}"
+  data-cat="{{ $catKey }}"
+  data-year="{{ $page.Date.Format "2006" }}"
+  data-month="{{ $page.Date.Format "2006-01" }}"
+  data-type="{{ delimit $types "," }}"
+  data-date="{{ $page.Date.Unix }}"
+  data-likes="{{ $likes }}"
+  data-search="{{ lower ($plain) }} {{ range $page.Params.tags }}#{{ lower . }} {{ end }}"
+>
+  <div class="note-meta">
+    <img class="note-avatar no-zoom" src="{{ $page.Site.Params.avatar }}" width="20" height="20" alt="">
+    <span class="note-name">{{ $page.Site.Params.author }}</span>
+    <span class="note-dot"> · </span>
+    <a class="note-date" href="{{ $page.RelPermalink }}">
+      <time datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ $page.Date.Format "2006-01-02" }}</time>
+    </a>
+    <span class="note-dot"> · </span>
+    <a class="note-cat" href="/notes/?c={{ $catKey }}" data-filter-cat="{{ $catKey }}">{{ $catName }}</a>
+  </div>
+
+  <div class="note-body">
+    {{- if and (not $single) $page.Params.fold -}}
+      {{- $parts := split $page.Content "<!--more-->" -}}
+      {{- if gt (len $parts) 1 -}}
+        <div class="note-lead">
+          {{ index $parts 0 | safeHTML }}
+          <button type="button" class="note-unfold" data-unfold>…展开全文</button>
+        </div>
+        <div class="note-rest">
+          {{ index $parts 1 | safeHTML }}
+        </div>
+      {{- else -}}
+        {{ $page.Content }}
+      {{- end -}}
+    {{- else -}}
+      {{ $page.Content }}
+    {{- end -}}
+
+    {{- with $page.Params.article -}}
+      <a class="note-article" href="{{ .url }}">
+        <strong>{{ .title }}</strong>
+        {{- with .summary -}}<span>{{ . }}</span>{{- end -}}
+      </a>
+    {{- end -}}
+
+    {{- if eq (len $images) 1 -}}
+      <div class="note-media note-media-1">
+        <img class="note-img" src="{{ index $images 0 }}" alt="" loading="lazy" decoding="async">
+      </div>
+    {{- else if gt (len $images) 1 -}}
+      <div class="note-media note-strip">
+        {{- range $images -}}
+          <img class="note-img" src="{{ . }}" alt="" loading="lazy" decoding="async">
+        {{- end -}}
+      </div>
+    {{- end -}}
+
+    {{- with $page.Params.tags -}}
+      <div class="note-tags">
+        {{- range . -}}
+          <a class="note-tag" href="/notes/?tag={{ . }}" data-filter-tag="{{ . }}">#{{ . }}</a>
+        {{- end -}}
+      </div>
+    {{- end -}}
+  </div>
+
+  <div class="note-foot">
+    <button type="button" class="note-stat note-like-btn" data-like-id="{{ $slug }}" data-base-likes="{{ $likes }}" title="喜欢">
+      <svg aria-hidden="true"><use href="#ni-like"/></svg>
+      <span class="note-like-count">{{ $likes }}</span>
+    </button>
+    <button type="button" class="note-stat note-share" data-copy-url="{{ $page.Permalink }}" title="复制链接">
+      <svg aria-hidden="true"><use href="#ni-link"/></svg>
+      <span class="note-copy-label">分享</span>
+    </button>
+  </div>
+</article>

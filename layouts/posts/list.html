@@ -1,0 +1,35 @@
+{{ define "body_id" }}archive{{ end }}
+
+{{ define "main" }}
+<div class="archive">
+  <h1 class="visually-hidden">文章归档</h1>
+  <nav class="archive-cats" id="J_archive_cats" aria-label="分类">
+    <button type="button" data-cat="" aria-pressed="true">全部</button>
+    {{- range .Site.Params.postCategories -}}
+      {{- $key := .key -}}
+      {{- $posts := where (where $.Site.RegularPages "Section" "posts") "Params.category" $key -}}
+      {{- if gt (len $posts) 0 -}}
+        <button type="button" data-cat="{{ $key }}" aria-pressed="false">{{ .name }}</button>
+      {{- end -}}
+    {{- end -}}
+  </nav>
+
+  {{- range .Site.Params.postCategories -}}
+    {{- $key := .key -}}
+    {{- $posts := where (where $.Site.RegularPages "Section" "posts") "Params.category" $key -}}
+    {{- if gt (len $posts) 0 -}}
+    <section class="archive-group" id="{{ $key }}" data-group="{{ $key }}">
+      <h2>{{ .name }}<span>{{ len $posts }}</span></h2>
+      <ul>
+        {{- range $posts.ByDate.Reverse -}}
+          <li>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+          </li>
+        {{- end -}}
+      </ul>
+    </section>
+    {{- end -}}
+  {{- end -}}
+</div>
+{{ end }}

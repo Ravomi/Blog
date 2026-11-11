@@ -1,0 +1,62 @@
+{{ define "body_id" }}{{ if eq .Section "posts" }}post{{ else }}page{{ end }}{{ end }}
+
+{{ define "main" }}
+{{ if eq .Section "posts" }}
+<div class="post-shell">
+  <article class="hentry">
+    <div class="entry-content">
+      <h1 class="entry-title">{{ .Title }}</h1>
+      <div class="page-info">
+        <span>{{ .Site.Params.author }}</span>
+        <span>·</span>
+        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+        {{- $catKey := .Params.category -}}
+        {{- if $catKey -}}
+          {{- $catName := $catKey -}}
+          {{- range .Site.Params.postCategories -}}
+            {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+          {{- end -}}
+          <span>·</span>
+          <a href="/posts/#{{ $catKey }}">{{ $catName }}</a>
+        {{- end -}}
+        <span>·</span>
+        <span>约 {{ .ReadingTime }} 分钟</span>
+      </div>
+      {{ .Content }}
+    </div>
+  </article>
+
+  <aside class="post-toc" id="J_post_toc" hidden aria-label="文章目录">
+    <div class="post-toc-inner">
+      <nav class="post-toc-nav" id="J_post_toc_nav"></nav>
+    </div>
+  </aside>
+</div>
+
+{{- if or .PrevInSection .NextInSection -}}
+<div class="read-more">
+  <div class="read-more-header">
+    <a href="/posts/" class="read-more-btn">阅读更多</a>
+  </div>
+  <div class="read-more-list">
+    {{- with .NextInSection -}}
+      <a href="{{ .RelPermalink }}">← {{ .Title }}</a>
+    {{- else -}}
+      <span></span>
+    {{- end -}}
+    {{- with .PrevInSection -}}
+      <a href="{{ .RelPermalink }}">{{ .Title }} →</a>
+    {{- end -}}
+  </div>
+</div>
+{{- end -}}
+
+{{ else }}
+<article class="hentry">
+  <h1 class="visually-hidden">{{ .Title }}</h1>
+  <div class="entry-content">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}
+{{ end }}

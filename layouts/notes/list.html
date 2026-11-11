@@ -1,0 +1,94 @@
+{{ define "body_id" }}notes{{ end }}
+
+{{ define "main" }}
+{{ partial "note-icons.html" . }}
+
+{{- $notes := (where .Site.RegularPages "Section" "notes").ByDate.Reverse -}}
+{{- $years := slice -}}
+{{- range $notes -}}
+  {{- $y := .Date.Format "2006" -}}
+  {{- if not (in $years $y) -}}
+    {{- $years = $years | append $y -}}
+  {{- end -}}
+{{- end -}}
+
+<div class="notes">
+  <form class="notes-bar" id="J_notes_bar" role="search" onsubmit="return false">
+    <h1 class="notes-title">Notes</h1>
+    <div class="notes-controls">
+      <select id="J_notes_c" name="c" aria-label="分类">
+        <option value="">分类</option>
+        {{- range .Site.Params.noteCategories -}}
+          <option value="{{ .key }}">{{ .name }}</option>
+        {{- end -}}
+      </select>
+
+      <select id="J_notes_y" name="y" aria-label="年份">
+        <option value="">年份</option>
+        {{- range $years -}}
+          <option value="{{ . }}">{{ . }}</option>
+        {{- end -}}
+      </select>
+
+      <select id="J_notes_t" name="t" aria-label="类型">
+        <option value="">类型</option>
+        <option value="l">长文</option>
+        <option value="p">图片</option>
+        <option value="a">引用文章</option>
+      </select>
+
+      <select id="J_notes_sort" name="sort" aria-label="排序">
+        <option value="">最新</option>
+        <option value="old">最早</option>
+        <option value="like">喜欢最多</option>
+      </select>
+
+      <button class="notes-find" id="J_notes_find" type="button" aria-label="搜索" aria-expanded="false" aria-controls="J_notes_q">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.4 10.4 3 3"/></svg>
+      </button>
+    </div>
+
+    <input class="notes-search" id="J_notes_q" type="text" name="q" placeholder="搜索碎碎念或 #标签…" aria-label="搜索 Notes" autocomplete="off">
+  </form>
+
+  <div class="notes-list" id="J_notes">
+    {{- range $notes -}}
+      {{ partial "note-card.html" (dict "page" . "single" false) }}
+    {{- end -}}
+  </div>
+
+  <div class="notes-empty" id="J_notes_empty" hidden>
+    <p>没有找到匹配的碎碎念 🍞</p>
+  </div>
+
+  {{- if gt (len $years) 0 -}}
+  <nav class="notes-archive" aria-label="按月归档">
+    <h2 class="notes-archive-title">按月归档</h2>
+    {{- range $years -}}
+      {{- $yr := . -}}
+      <div class="notes-year">
+        <span>{{ $yr }}</span>
+        {{- range seq 12 1 -}}
+          {{- $mStr := printf "%02d" . -}}
+          {{- $ym := printf "%s-%s" $yr $mStr -}}
+          {{- $col := add (sub 13 .) 1 -}}
+          {{- $cnt := 0 -}}
+          {{- range $notes -}}
+            {{- if eq (.Date.Format "2006-01") $ym -}}
+              {{- $cnt = add $cnt 1 -}}
+            {{- end -}}
+          {{- end -}}
+          {{- if gt $cnt 0 -}}
+            <button type="button" data-ym="{{ $ym }}" style="grid-column: {{ $col }}" title="{{ $yr }} 年 {{ . }} 月，{{ $cnt }} 条">{{ . }}</button>
+          {{- end -}}
+        {{- end -}}
+      </div>
+    {{- end -}}
+  </nav>
+  {{- end -}}
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script src="/js/notes.js" defer></script>
+{{ end }}

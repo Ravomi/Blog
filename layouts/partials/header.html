@@ -1,0 +1,43 @@
+{{- $rel := .RelPermalink -}}
+<div class="header-menu" id="J_header">
+  <ul class="header-item-container">
+    <li class="header-item-title {{ if .IsHome }}active{{ end }}">
+      <a href="/" class="title">
+        <span class="title-icon" aria-hidden="true">🍞</span>
+        <span>{{ .Site.Title }}</span>
+      </a>
+    </li>
+
+    <li class="header-item-left {{ if or (eq .Section "posts") (strings.HasPrefix $rel "/posts/") }}active{{ end }}">
+      <a href="/posts/">Blog</a>
+    </li>
+
+    <li class="header-item-left {{ if or (eq .Section "notes") (strings.HasPrefix $rel "/notes/") }}active{{ end }}">
+      <a href="/notes/">Notes</a>
+    </li>
+
+    <li class="header-item-left {{ if strings.HasPrefix $rel "/about" }}active{{ end }}">
+      <a href="/about/">About</a>
+    </li>
+
+    <li class="header-social">
+      {{ with .Site.Params.github }}
+      <a href="{{ . }}" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.43 2.86 8.17 6.84 9.49.5.09.68-.22.68-.48 0-.24-.01-1.03-.01-1.86-2.51.46-3.16-.61-3.36-1.17-.11-.29-.6-1.17-1.03-1.41-.35-.19-.85-.65-.01-.66.79-.01 1.35.72 1.54 1.02.9 1.51 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.23-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.26 2.75 1.03.8-.22 1.65-.34 2.5-.34s1.7.11 2.5.34c1.91-1.3 2.75-1.03 2.75-1.03.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.91.68 1.85 0 1.34-.01 2.41-.01 2.75 0 .26.19.58.69.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+      </a>
+      {{ end }}
+      <a href="/feed.xml" target="_blank" rel="noopener" aria-label="RSS" title="RSS 订阅">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3c8.84 0 16 7.16 16 16h-3c0-7.18-5.82-13-13-13V3zm0 7c4.97 0 9 4.03 9 9h-3c0-3.31-2.69-6-6-6v-3zm2 7a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+      </a>
+    </li>
+
+    <li class="search-btn-container">
+      <button id="search-btn" class="search-btn" type="button" aria-label="搜索" title="搜索 (按 /)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <circle cx="10.5" cy="10.5" r="7.5" stroke="currentColor" stroke-width="1.8" />
+          <path d="M21 21L15.8 15.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </button>
+    </li>
+  </ul>
+</div>
