@@ -2,6 +2,7 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
+    initHeaderScroll();
     initCodeBlocks();
     initPostToc();
     initArchiveFilter();
@@ -9,6 +10,22 @@
     initGlobalSearch();
     initExternalLinks();
   });
+
+  function initHeaderScroll() {
+    var header = document.getElementById('J_header');
+    if (!header) return;
+    var beforeScrollTop = document.documentElement.scrollTop || window.scrollY || 0;
+    window.addEventListener('scroll', function () {
+      var afterScrollTop = document.documentElement.scrollTop || window.scrollY || 0;
+      var delta = afterScrollTop - beforeScrollTop;
+      if (window.innerWidth >= 736) {
+        header.className = (delta > 0 && afterScrollTop > 60)
+          ? 'header-menu header-menu-overflow'
+          : 'header-menu';
+      }
+      beforeScrollTop = afterScrollTop;
+    }, { passive: true });
+  }
 
   function initCodeBlocks() {
     var blocks = document.querySelectorAll('.highlight');
@@ -19,7 +36,8 @@
       var header = document.createElement('div');
       header.className = 'highlight-header';
       header.innerHTML =
-        '<span class="highlight-lang">' + (lang || 'code') + '</span>' +
+        '<div class="highlight-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>' +
+        '<span class="highlight-lang">' + (lang || '') + '</span>' +
         '<button type="button" class="copy-btn">复制</button>';
       block.insertBefore(header, block.firstChild);
 
@@ -44,7 +62,7 @@
     var headings = Array.prototype.slice.call(content.querySelectorAll('h2, h3')).filter(function (h) {
       return h.textContent && h.textContent.trim();
     });
-    if (headings.length < 2) return;
+    if (headings.length < 3) return;
 
     headings.forEach(function (h, idx) {
       if (!h.id) h.id = 'sec-' + (idx + 1);
@@ -61,7 +79,7 @@
 
     var links = Array.prototype.slice.call(nav.querySelectorAll('.post-toc-link'));
     var update = function () {
-      var pivot = window.innerHeight * 0.24;
+      var pivot = window.innerHeight * 0.22;
       var activeId = headings[0].id;
       headings.forEach(function (h) {
         if (h.getBoundingClientRect().top <= pivot) activeId = h.id;
@@ -175,7 +193,7 @@
       selectedIdx = -1;
 
       if (!query) {
-        resultsEl.innerHTML = '<div class="search-placeholder">输入关键词搜索文章、周刊或碎碎念…</div>';
+        resultsEl.innerHTML = '<div class="search-placeholder">Type to search articles...</div>';
         return;
       }
 
@@ -186,12 +204,12 @@
       });
 
       if (!matches.length) {
-        resultsEl.innerHTML = '<div class="search-no-results">没有找到与 “' + escapeHtml(q) + '” 相关的内容 🍞</div>';
+        resultsEl.innerHTML = '<div class="search-no-results">No results found</div>';
         return;
       }
 
       resultsEl.innerHTML = matches.slice(0, 20).map(function (item) {
-        var badge = item.section === 'notes' ? '碎碎念' : (item.section === 'weekly' ? '周刊' : (item.section === 'posts' ? '文章' : '页面'));
+        var badge = item.section === 'notes' ? 'Note' : (item.section === 'weekly' ? 'Weekly' : (item.section === 'posts' ? 'Blog' : 'Page'));
         return '<a class="search-result-item" href="' + escapeHtml(item.url) + '">' +
           '<div class="search-result-title"><span class="search-badge">' + badge + '</span><span>' + escapeHtml(item.title) + '</span></div>' +
           '<div class="search-result-snippet">' + escapeHtml(item.content || '') + '</div>' +

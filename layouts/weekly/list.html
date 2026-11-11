@@ -1,36 +1,22 @@
-{{ define "body_id" }}weekly{{ end }}
+{{ define "body_id" }}archive{{ end }}
 
 {{ define "main" }}
-<div class="page-head">
-  <h1>烘焙周刊 · Weekly</h1>
-  <p>每周一炉，记录最近看到的好工具、好文章、代码与生活片段。</p>
-</div>
-
-{{- $issues := (where .Site.RegularPages "Section" "weekly").ByDate.Reverse -}}
-<div class="weekly-grid">
-  {{- range $issues -}}
-    <a href="{{ .RelPermalink }}" class="weekly-card">
-      <div class="weekly-cover">
-        {{- with .Params.cover -}}
-          <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="async">
-        {{- else -}}
-          <div class="weekly-cover-art">
-            <span class="weekly-issue-no">#{{ printf "%02d" (.Params.issue | default 1) }}</span>
-            <span class="weekly-cover-bread" aria-hidden="true">🍞</span>
-          </div>
-        {{- end -}}
-      </div>
-      <div class="weekly-card-body">
-        <div class="weekly-meta">
-          <span class="weekly-badge">第 {{ .Params.issue | default 1 }} 期</span>
+<div class="archive">
+  <h1 class="archive-page-title">Weekly</h1>
+  {{- $issues := (where .Site.RegularPages "Section" "weekly").ByDate.Reverse -}}
+  <div class="weekly-cards">
+    {{- range $issues -}}
+      <a href="{{ .RelPermalink }}" class="weekly-item">
+        <div class="weekly-item-top">
+          <span class="weekly-item-no">第 {{ .Params.issue | default 1 }} 期</span>
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
         </div>
-        <h2 class="weekly-title">{{ .Title }}</h2>
-        <p class="weekly-desc">
-          {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 88 }}{{- end -}}
+        <h2 class="weekly-item-title">{{ .Title }}</h2>
+        <p class="weekly-item-desc">
+          {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 110 }}{{- end -}}
         </p>
-      </div>
-    </a>
-  {{- end -}}
+      </a>
+    {{- end -}}
+  </div>
 </div>
 {{ end }}

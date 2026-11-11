@@ -12,62 +12,59 @@
   {{- end -}}
 {{- end -}}
 
-<div class="notes-wrap">
+<div class="notes">
   <form class="notes-bar" id="J_notes_bar" role="search" onsubmit="return false">
-    <div class="notes-head-title">
-      <h1 class="notes-title">碎碎念</h1>
-      <span class="notes-count">{{ len $notes }} 炉</span>
-    </div>
+    <h1 class="notes-title">Notes</h1>
 
     <div class="notes-controls">
       <select id="J_notes_c" name="c" aria-label="分类">
-        <option value="">全部分类</option>
+        <option value="">分类</option>
         {{- range .Site.Params.noteCategories -}}
           <option value="{{ .key }}">{{ .name }}</option>
         {{- end -}}
       </select>
 
       <select id="J_notes_y" name="y" aria-label="年份">
-        <option value="">全部年份</option>
+        <option value="">年份</option>
         {{- range $years -}}
           <option value="{{ . }}">{{ . }}</option>
         {{- end -}}
       </select>
 
       <select id="J_notes_t" name="t" aria-label="类型">
-        <option value="">全部类型</option>
-        <option value="l">长碎碎念</option>
-        <option value="p">带图</option>
-        <option value="a">关联文章</option>
+        <option value="">类型</option>
+        <option value="l">长文</option>
+        <option value="p">图片</option>
+        <option value="a">引用</option>
       </select>
 
       <select id="J_notes_sort" name="sort" aria-label="排序">
-        <option value="">最新出炉</option>
-        <option value="old">最早记录</option>
-        <option value="like">最受欢迎</option>
+        <option value="">最新</option>
+        <option value="old">最早</option>
+        <option value="like">点赞最多</option>
       </select>
 
-      <button class="notes-find" id="J_notes_find" type="button" aria-label="筛选关键词" aria-expanded="false" aria-controls="J_notes_q">
+      <button class="notes-find" id="J_notes_find" type="button" aria-label="搜索" aria-expanded="false" aria-controls="J_notes_q">
         <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.4 10.4 3 3"/></svg>
       </button>
     </div>
 
-    <input class="notes-search" id="J_notes_q" type="text" name="q" placeholder="输入关键词或 #标签 过滤…" aria-label="过滤碎碎念" autocomplete="off">
+    <input class="notes-search" id="J_notes_q" type="text" name="q" placeholder="搜索" aria-label="搜索 Notes" autocomplete="off">
   </form>
 
-  <div class="notes-timeline" id="J_notes">
+  <div class="notes-list" id="J_notes">
     {{- range $notes -}}
       {{ partial "note-card.html" (dict "page" . "single" false) }}
     {{- end -}}
   </div>
 
   <div class="notes-empty" id="J_notes_empty" hidden>
-    <p>没有找到匹配的碎碎念 🍞</p>
+    <p>没有找到相关记录</p>
   </div>
 
   {{- if gt (len $years) 0 -}}
-  <nav class="notes-archive" aria-label="按月归档">
-    <h2 class="notes-archive-title">月份索引</h2>
+  <nav class="notes-archive" aria-label="归档">
+    <h2 class="notes-archive-title">归档</h2>
     {{- range $years -}}
       {{- $yr := . -}}
       <div class="notes-year">
@@ -83,7 +80,7 @@
             {{- end -}}
           {{- end -}}
           {{- if gt $cnt 0 -}}
-            <button type="button" data-ym="{{ $ym }}" style="grid-column: {{ $col }}" title="{{ $yr }} 年 {{ . }} 月，{{ $cnt }} 条">{{ . }}月</button>
+            <button type="button" data-ym="{{ $ym }}" style="grid-column: {{ $col }}" title="{{ $yr }} 年 {{ . }} 月，{{ $cnt }} 条">{{ . }}</button>
           {{- end -}}
         {{- end -}}
       </div>

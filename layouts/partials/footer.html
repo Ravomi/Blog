@@ -1,7 +1,7 @@
-<footer class="site-footer" role="contentinfo">
-  <div class="site-footer-icons">
+<div class="footer-wrapper">
+  <footer role="contentinfo">
     {{ with .Site.Params.github }}
-    <a href="{{ . }}" rel="nofollow noopener" target="_blank" class="footer-icon-link" aria-label="GitHub" title="GitHub">
+    <a href="{{ . }}" rel="nofollow noopener" target="_blank" class="social-icon" aria-label="GitHub">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12.001 2C6.476 2 2.001 6.475 2.001 12c0 4.425 2.862 8.163 6.837 9.488.5.087.688-.213.688-.475 0-.238-.013-1.025-.013-1.863-2.512.463-3.162-.612-3.362-1.175-.113-.287-.6-1.175-1.025-1.412-.35-.188-.85-.65-.013-.663.788-.012 1.35.725 1.538 1.025.9 1.513 2.337 1.088 2.912.825.088-.65.35-1.087.638-1.337-2.225-.25-4.55-1.113-4.55-4.938 0-1.087.387-1.987 1.025-2.687-.1-.25-.45-1.275.1-2.65 0 0 .837-.263 2.75 1.025.8-.225 1.65-.338 2.5-.338s1.7.113 2.5.338c1.912-1.3 2.75-1.025 2.75-1.025.55 1.375.2 2.4.1 2.65.637.7 1.025 1.587 1.025 2.687 0 3.838-2.338 4.688-4.563 4.938.363.312.675.912.675 1.85 0 1.337-.012 2.412-.012 2.75 0 .262.187.575.687.475A10.014 10.014 0 0 0 22.001 12c0-5.525-4.475-10-10-10Z"/>
       </svg>
@@ -9,22 +9,22 @@
     {{ end }}
 
     {{ with .Site.Params.x }}
-    <a href="{{ . }}" rel="nofollow noopener" target="_blank" class="footer-icon-link" aria-label="X" title="X (@Les_pauvres)">
+    <a href="{{ . }}" rel="nofollow noopener" target="_blank" class="social-icon" aria-label="X">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3zm-1.08 16.17h1.7L7.4 4.73H5.58l11.09 14.44z"/>
       </svg>
     </a>
     {{ end }}
 
-    <a href="{{ "feed.xml" | relURL }}" rel="nofollow" target="_blank" class="footer-icon-link" aria-label="RSS Feed" title="RSS 订阅">
+    <a href="{{ "feed.xml" | relURL }}" rel="nofollow" target="_blank" class="social-icon" aria-label="RSS Feed">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M3 3c9.941 0 18 8.059 18 18h-3c0-8.284-6.716-15-15-15V3Zm0 7c6.075 0 11 4.925 11 11h-3c0-4.418-3.582-8-8-8v-3Zm0 7a4 4 0 0 1 4 4H3v-4Z"/>
       </svg>
     </a>
 
-    <a href="{{ "about/" | relURL }}" class="footer-icon-link footer-bakery-years" aria-label="{{ .Site.Title }}">
-      <span class="footer-bread" aria-hidden="true">🍞</span>
-      <span>{{ .Site.Params.since }}~{{ now.Format "2006" }}</span>
+    <a href="{{ "about/" | relURL }}" class="social-icon time-icon" aria-label="{{ .Site.Title }}">
+      <span class="bread-icon" aria-hidden="true">🍞</span>
+      <span class="repo-time">{{ .Site.Params.since }}~{{ now.Format "2006" }}</span>
     </a>
-  </div>
-</footer>
+  </footer>
+</div>
