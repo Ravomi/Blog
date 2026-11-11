@@ -91,10 +91,15 @@
 
     var syncFromUrl = function () {
       var params = new URLSearchParams(location.search);
-      if (selCat) selCat.value = params.get('c') || '';
-      if (selYear) selYear.value = params.get('y') || '';
-      if (selType) selType.value = params.get('t') || '';
-      if (selSort) selSort.value = params.get('sort') || '';
+      var setValid = function (sel, val) {
+        if (!sel) return;
+        var ok = Array.prototype.some.call(sel.options, function (o) { return o.value === val; });
+        sel.value = ok ? val : '';
+      };
+      setValid(selCat, params.get('c') || '');
+      setValid(selYear, params.get('y') || '');
+      setValid(selType, params.get('t') || '');
+      setValid(selSort, params.get('sort') || '');
       activeMonth = params.get('ym') || '';
 
       var q = params.get('q') || '';
@@ -162,10 +167,23 @@
       });
     };
 
+    var fitSelects = function () {
+      var ruler = document.createElement('span');
+      ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;font:inherit;font-size:14px;';
+      bar.appendChild(ruler);
+      [selCat, selYear, selType, selSort].forEach(function (sel) {
+        if (!sel || sel.selectedIndex < 0) return;
+        ruler.textContent = sel.options[sel.selectedIndex].text;
+        sel.style.width = (Math.ceil(ruler.getBoundingClientRect().width) + 18) + 'px';
+      });
+      ruler.remove();
+    };
+
     [selCat, selYear, selType, selSort].forEach(function (sel) {
       if (!sel) return;
       sel.addEventListener('change', function () {
         if (sel === selYear && selYear.value) activeMonth = '';
+        fitSelects();
         syncToUrl();
         apply();
       });
@@ -194,6 +212,7 @@
       btn.addEventListener('click', function () {
         activeMonth = activeMonth === btn.dataset.ym ? '' : btn.dataset.ym;
         if (activeMonth && selYear) selYear.value = '';
+        fitSelects();
         syncToUrl();
         apply();
         bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -207,6 +226,7 @@
         e.preventDefault();
         var nextCat = catLink.dataset.filterCat;
         selCat.value = selCat.value === nextCat ? '' : nextCat;
+        fitSelects();
         syncToUrl();
         apply();
         return;
@@ -225,6 +245,10 @@
     });
 
     syncFromUrl();
+    fitSelects();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(fitSelects);
+    }
     apply();
   }
 })();
