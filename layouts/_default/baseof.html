@@ -2,16 +2,16 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
   {{- $desc := .Description | default (.Summary | plainify | truncate 120) | default .Site.Params.description -}}
   <meta name="description" content="{{ $desc }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f5f4ed">
+  <meta name="theme-color" content="#fbf8f3">
   <meta name="author" content="{{ .Site.Params.author }}">
 
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
-  <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}">
+  <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}">
   <meta property="og:description" content="{{ $desc }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:site_name" content="{{ .Site.Title }}">
@@ -21,21 +21,22 @@
   <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Feed" href="{{ "feed.xml" | relURL }}">
   <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Notes" href="{{ "notes/feed.xml" | relURL }}">
 
-  <link rel="preconnect" href="https://gw.alipayobjects.com" crossorigin>
-  <link rel="preload" href="{{ "css/jinkai.css" | relURL }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="{{ "css/jinkai.css" | relURL }}"></noscript>
+  <link rel="preload" href="{{ "css/genjyuu.css" | relURL }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ "css/genjyuu.css" | relURL }}"></noscript>
   <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 </head>
 <body id="{{ block "body_id" . }}page{{ end }}" data-baseurl="{{ "" | relURL }}">
-  {{ partial "header.html" . }}
-  {{ partial "banner.html" . }}
+  <div class="bakery-shell">
+    {{ partial "header.html" . }}
 
-  <main id="main">
-    {{ block "main" . }}{{ end }}
-  </main>
+    <main id="main" class="bakery-main">
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    {{ partial "footer.html" . }}
+  </div>
 
   {{ partial "search-modal.html" . }}
-  {{ partial "footer.html" . }}
 
   <div id="J_lightbox" class="lightbox-backdrop" aria-hidden="true">
     <img id="J_lightbox_img" src="" alt="">

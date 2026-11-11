@@ -1,25 +1,56 @@
-{{ define "body_id" }}post-index{{ end }}
+{{ define "body_id" }}home{{ end }}
 
 {{ define "main" }}
-<h1 class="visually-hidden">{{ .Site.Title }}</h1>
+<section class="bakery-intro">
+  <p class="bakery-tagline">新鲜出炉的代码笔记、产品想法与日常碎碎念。</p>
+</section>
 
 {{- $notes := where .Site.RegularPages "Section" "notes" -}}
 {{- if gt (len $notes) 0 -}}
-<section class="home-notes-card" aria-label="最新碎碎念">
-  <div class="home-notes-head">
-    <h2>刚出炉的碎碎念</h2>
-    <a href="{{ "notes/" | relURL }}">查看全部 ({{ len $notes }}) →</a>
+<section class="home-section">
+  <div class="section-head">
+    <h2>最近碎碎念</h2>
+    <a href="{{ "notes/" | relURL }}" class="section-more">全部 {{ len $notes }} 条 →</a>
   </div>
-  <div class="home-notes-items">
+  <div class="crumb-grid">
     {{- range first 3 ($notes.ByDate.Reverse) -}}
       {{- $catKey := .Params.category | default "think" -}}
       {{- $catName := $catKey -}}
       {{- range $.Site.Params.noteCategories -}}
         {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
       {{- end -}}
-      <a class="home-note-row" href="{{ .RelPermalink }}">
-        <span class="home-note-meta">{{ .Date.Format "2006-01-02" }} · {{ $catName }}</span>
-        <span class="home-note-text">{{ .Plain | htmlUnescape | strings.TrimSpace | truncate 110 }}</span>
+      <a class="crumb-card" href="{{ .RelPermalink }}">
+        <div class="crumb-meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
+          <span class="crumb-badge">{{ $catName }}</span>
+        </div>
+        <p class="crumb-text">{{ .Plain | htmlUnescape | strings.TrimSpace | truncate 96 }}</p>
+      </a>
+    {{- end -}}
+  </div>
+</section>
+{{- end -}}
+
+{{- $weeklies := where .Site.RegularPages "Section" "weekly" -}}
+{{- if gt (len $weeklies) 0 -}}
+<section class="home-section">
+  <div class="section-head">
+    <h2>最新周刊</h2>
+    <a href="{{ "weekly/" | relURL }}" class="section-more">全部 {{ len $weeklies }} 期 →</a>
+  </div>
+  <div class="loaf-list">
+    {{- range first 2 ($weeklies.ByDate.Reverse) -}}
+      <a href="{{ .RelPermalink }}" class="loaf-item">
+        <div class="loaf-main">
+          <h3 class="loaf-title"><span class="weekly-inline-tag">#{{ printf "%02d" (.Params.issue | default 1) }}</span>{{ .Title }}</h3>
+          <p class="loaf-desc">
+            {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 110 }}{{- end -}}
+          </p>
+        </div>
+        <div class="loaf-side">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+          <span class="loaf-cat">Weekly</span>
+        </div>
       </a>
     {{- end -}}
   </div>
@@ -28,17 +59,33 @@
 
 {{- $posts := where .Site.RegularPages "Section" "posts" -}}
 {{- $paginator := .Paginate ($posts.ByDate.Reverse) -}}
-{{- range $paginator.Pages -}}
-  <a href="{{ .RelPermalink }}" rel="bookmark" title="{{ .Title }}" class="header-href">
-    <article class="hentry">
-      <h2 class="entry-title">{{ .Title }}</h2>
-      <div class="entry-excerpt">
-        <span class="excerpt-date">【{{ .Date.Format "2006-01-02" }}】</span>
-        {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 120 }}{{- end -}}
-      </div>
-    </article>
-  </a>
-{{- end -}}
+<section class="home-section">
+  <div class="section-head">
+    <h2>长文烘焙</h2>
+    <a href="{{ "posts/" | relURL }}" class="section-more">归档目录 →</a>
+  </div>
+  <div class="loaf-list">
+    {{- range $paginator.Pages -}}
+      {{- $catKey := .Params.category | default "" -}}
+      {{- $catName := $catKey -}}
+      {{- range $.Site.Params.postCategories -}}
+        {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
+      {{- end -}}
+      <a href="{{ .RelPermalink }}" rel="bookmark" class="loaf-item">
+        <div class="loaf-main">
+          <h3 class="loaf-title">{{ .Title }}</h3>
+          <p class="loaf-desc">
+            {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 115 }}{{- end -}}
+          </p>
+        </div>
+        <div class="loaf-side">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+          {{- if $catName -}}<span class="loaf-cat">{{ $catName }}</span>{{- end -}}
+        </div>
+      </a>
+    {{- end -}}
+  </div>
+</section>
 
 {{- if gt $paginator.TotalPages 1 -}}
 <nav class="pagination" aria-label="分页">

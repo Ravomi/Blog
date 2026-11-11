@@ -13,6 +13,7 @@ disableKinds = ["taxonomy", "term"]
 [permalinks]
   posts = "/posts/:slug/"
   notes = "/notes/:slug/"
+  weekly = "/weekly/:slug/"
 
 [markup]
   [markup.goldmark]
@@ -34,14 +35,11 @@ disableKinds = ["taxonomy", "term"]
 
 [params]
   author = "Waya"
-  description = "Waya's Bakery — 新鲜出炉的代码、思考与日常碎碎念。"
+  description = "Waya's Bakery — 新鲜出炉的代码、周刊与日常碎碎念。"
   avatar = "/images/avatar.svg"
   github = "https://github.com/Ravomi"
+  x = "https://x.com/Les_pauvres"
   since = "2022"
-  mottoHome = "慢火烘焙，日日是好日"
-  mottoNotes = "人生到处知何似，应似飞鸿踏雪泥"
-  mottoPosts = "旧书不厌百回读，熟读深思子自知"
-  mottoAbout = "且将新火试新茶，诗酒趁年华"
 
   [[params.noteCategories]]
     key = "ai"

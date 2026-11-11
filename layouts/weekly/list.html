@@ -1,0 +1,36 @@
+{{ define "body_id" }}weekly{{ end }}
+
+{{ define "main" }}
+<div class="page-head">
+  <h1>烘焙周刊 · Weekly</h1>
+  <p>每周一炉，记录最近看到的好工具、好文章、代码与生活片段。</p>
+</div>
+
+{{- $issues := (where .Site.RegularPages "Section" "weekly").ByDate.Reverse -}}
+<div class="weekly-grid">
+  {{- range $issues -}}
+    <a href="{{ .RelPermalink }}" class="weekly-card">
+      <div class="weekly-cover">
+        {{- with .Params.cover -}}
+          <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" decoding="async">
+        {{- else -}}
+          <div class="weekly-cover-art">
+            <span class="weekly-issue-no">#{{ printf "%02d" (.Params.issue | default 1) }}</span>
+            <span class="weekly-cover-bread" aria-hidden="true">🍞</span>
+          </div>
+        {{- end -}}
+      </div>
+      <div class="weekly-card-body">
+        <div class="weekly-meta">
+          <span class="weekly-badge">第 {{ .Params.issue | default 1 }} 期</span>
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        </div>
+        <h2 class="weekly-title">{{ .Title }}</h2>
+        <p class="weekly-desc">
+          {{- with .Description -}}{{ . }}{{- else -}}{{ .Summary | plainify | truncate 88 }}{{- end -}}
+        </p>
+      </div>
+    </a>
+  {{- end -}}
+</div>
+{{ end }}

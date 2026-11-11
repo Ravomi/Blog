@@ -1,17 +1,17 @@
 ---
 title: "关于"
 slug: "about"
-motto: "且将新火试新茶，诗酒趁年华"
 ---
 
 ## 关于 Waya's Bakery 🍞
 
 欢迎来到 **Waya's Bakery**（`waya.ink`）。
 
-这里像一家安静街角的小面包房：没有喧闹的算法推荐，只有每天慢火烘焙出来的代码笔记、产品想法与日常碎碎念。
+这里像一家安静街角的小面包房：没有喧闹的算法推荐，只有每天慢火烘焙出来的代码笔记、周刊见闻与日常碎碎念。
 
-- **[Blog](/posts/)**：写得稍微完整一些的技术复盘、工程实践与长文思考。
-- **[Notes](/notes/)**：随手记下的灵感片段、折腾记录与生活瞬间，支持按分类、时间与关键词检索。
+- **[碎碎念 · Notes](/notes/)**：随手记下的灵感片段、折腾记录与生活瞬间，支持按分类、时间与关键词检索。
+- **[周刊 · Weekly](/weekly/)**：每周一炉，汇总近期看到的好工具、好文章与有意思的探索。
+- **[文章 · Blog](/posts/)**：写得稍微完整一些的技术复盘、工程实践与长文思考。
 
 ## 为什么叫 Bakery
 
@@ -24,4 +24,5 @@ motto: "且将新火试新茶，诗酒趁年华"
 ## 联系与订阅
 
 - GitHub：[@Ravomi](https://github.com/Ravomi)
-- RSS 订阅：[全站 Feed](/feed.xml) / [Notes Feed](/notes/feed.xml)
+- X (Twitter)：[@Les_pauvres](https://x.com/Les_pauvres)
+- RSS 订阅：[全站 Feed](/feed.xml) / [Notes Feed](/notes/feed.xml) / [Weekly Feed](/weekly/feed.xml)

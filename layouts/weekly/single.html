@@ -1,0 +1,44 @@
+{{ define "body_id" }}post{{ end }}
+
+{{ define "main" }}
+<div class="post-shell">
+  <article class="post-article">
+    <header class="post-header">
+      <div class="weekly-single-kicker">
+        <a href="{{ "weekly/" | relURL }}">🍞 烘焙周刊</a>
+        {{- with .Params.issue -}}<span>· 第 {{ . }} 期</span>{{- end -}}
+      </div>
+      <h1 class="entry-title">{{ .Title }}</h1>
+      <div class="page-info">
+        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+        <span>·</span>
+        <span>阅读约 {{ .ReadingTime }} 分钟</span>
+        <span>·</span>
+        <a href="{{ "weekly/feed.xml" | relURL }}" target="_blank" rel="noopener">周刊 RSS</a>
+      </div>
+    </header>
+
+    <div class="entry-content">
+      {{ .Content }}
+    </div>
+  </article>
+
+  <aside class="post-toc" id="J_post_toc" hidden aria-label="周刊目录">
+    <div class="post-toc-inner">
+      <div class="post-toc-label">本期目录</div>
+      <nav class="post-toc-nav" id="J_post_toc_nav"></nav>
+    </div>
+  </aside>
+</div>
+
+<nav class="post-neighbors" aria-label="相邻期数">
+  {{- with .NextInSection -}}
+    <a href="{{ .RelPermalink }}" class="neighbor-link">← 第 {{ .Params.issue | default "" }} 期：{{ .Title }}</a>
+  {{- else -}}
+    <a href="{{ "weekly/" | relURL }}" class="neighbor-link">← 返回周刊列表</a>
+  {{- end -}}
+  {{- with .PrevInSection -}}
+    <a href="{{ .RelPermalink }}" class="neighbor-link">第 {{ .Params.issue | default "" }} 期：{{ .Title }} →</a>
+  {{- end -}}
+</nav>
+{{ end }}

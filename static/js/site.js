@@ -2,9 +2,6 @@
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
-    initHeaderScroll();
-    initBannerFit();
-    initFireworkCanvas();
     initCodeBlocks();
     initPostToc();
     initArchiveFilter();
@@ -12,116 +9,6 @@
     initGlobalSearch();
     initExternalLinks();
   });
-
-  function initHeaderScroll() {
-    var header = document.getElementById('J_header');
-    if (!header) return;
-    var lastY = window.scrollY || 0;
-    window.addEventListener('scroll', function () {
-      var y = window.scrollY || 0;
-      var delta = y - lastY;
-      if (window.innerWidth >= 736) {
-        if (delta > 6 && y > 80) {
-          header.classList.add('header-menu-overflow');
-        } else if (delta < -4 || y <= 40) {
-          header.classList.remove('header-menu-overflow');
-        }
-      }
-      lastY = y;
-    }, { passive: true });
-  }
-
-  function initBannerFit() {
-    var svg = document.querySelector('.entry-header svg');
-    var text = svg && svg.querySelector('text');
-    if (!svg || !text) return;
-
-    var baseSize = parseFloat(text.getAttribute('font-size')) || 38;
-    var baseLetter = parseFloat(text.getAttribute('letter-spacing')) || 4;
-
-    var fit = function () {
-      var avail = svg.clientWidth - 64;
-      if (avail <= 0) return;
-      text.setAttribute('font-size', baseSize);
-      text.setAttribute('letter-spacing', baseLetter);
-      var natural = text.getComputedTextLength ? text.getComputedTextLength() : 0;
-      if (natural > avail && natural > 0) {
-        var scale = Math.max(0.5, avail / natural);
-        text.setAttribute('font-size', (baseSize * scale).toFixed(1));
-        text.setAttribute('letter-spacing', (baseLetter * scale).toFixed(2));
-      }
-    };
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(fit);
-    }
-    fit();
-    window.addEventListener('resize', fit);
-  }
-
-  function initFireworkCanvas() {
-    var canvas = document.getElementById('J_firework_canvas');
-    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var header = canvas.parentElement;
-    var ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    var resize = function () {
-      canvas.width = header.clientWidth || window.innerWidth;
-      canvas.height = header.clientHeight || 250;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
-    var particles = [];
-    var colors = ['#f3ebdb', '#ffca85', '#e8c39e', '#fff6e5'];
-    var running = false;
-
-    header.addEventListener('mousemove', function (e) {
-      var rect = canvas.getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      if (particles.length < 70) {
-        particles.push({
-          x: x + (Math.random() - 0.5) * 14,
-          y: y + (Math.random() - 0.5) * 14,
-          vy: 0.5 + Math.random() * 1.3,
-          r: 1.2 + Math.random() * 2.2,
-          alpha: 0.45 + Math.random() * 0.4,
-          color: colors[Math.floor(Math.random() * colors.length)]
-        });
-      }
-      if (!running) {
-        running = true;
-        requestAnimationFrame(tick);
-      }
-    });
-
-    function tick() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (var i = particles.length - 1; i >= 0; i--) {
-        var p = particles[i];
-        p.y += p.vy;
-        p.alpha -= 0.008;
-        if (p.y > canvas.height || p.alpha <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
-        ctx.save();
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-      if (particles.length > 0) {
-        requestAnimationFrame(tick);
-      } else {
-        running = false;
-      }
-    }
-  }
 
   function initCodeBlocks() {
     var blocks = document.querySelectorAll('.highlight');
@@ -132,8 +19,7 @@
       var header = document.createElement('div');
       header.className = 'highlight-header';
       header.innerHTML =
-        '<div class="highlight-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>' +
-        '<span class="highlight-lang">' + (lang || '') + '</span>' +
+        '<span class="highlight-lang">' + (lang || 'code') + '</span>' +
         '<button type="button" class="copy-btn">复制</button>';
       block.insertBefore(header, block.firstChild);
 
@@ -158,7 +44,7 @@
     var headings = Array.prototype.slice.call(content.querySelectorAll('h2, h3')).filter(function (h) {
       return h.textContent && h.textContent.trim();
     });
-    if (headings.length < 3) return;
+    if (headings.length < 2) return;
 
     headings.forEach(function (h, idx) {
       if (!h.id) h.id = 'sec-' + (idx + 1);
@@ -286,22 +172,26 @@
     var renderResults = function (q) {
       if (!indexData) return;
       var query = (q || '').trim().toLowerCase();
-      var matches = query
-        ? indexData.filter(function (item) {
-            return (item.title && item.title.toLowerCase().indexOf(query) !== -1) ||
-                   (item.content && item.content.toLowerCase().indexOf(query) !== -1) ||
-                   (item.category && item.category.toLowerCase().indexOf(query) !== -1);
-          })
-        : indexData.slice(0, 8);
-
       selectedIdx = -1;
+
+      if (!query) {
+        resultsEl.innerHTML = '<div class="search-placeholder">输入关键词搜索文章、周刊或碎碎念…</div>';
+        return;
+      }
+
+      var matches = indexData.filter(function (item) {
+        return (item.title && item.title.toLowerCase().indexOf(query) !== -1) ||
+               (item.content && item.content.toLowerCase().indexOf(query) !== -1) ||
+               (item.category && item.category.toLowerCase().indexOf(query) !== -1);
+      });
+
       if (!matches.length) {
-        resultsEl.innerHTML = '<div class="search-no-results">没有找到相关内容 🍞</div>';
+        resultsEl.innerHTML = '<div class="search-no-results">没有找到与 “' + escapeHtml(q) + '” 相关的内容 🍞</div>';
         return;
       }
 
       resultsEl.innerHTML = matches.slice(0, 20).map(function (item) {
-        var badge = item.section === 'notes' ? 'Note' : (item.section === 'posts' ? 'Blog' : 'Page');
+        var badge = item.section === 'notes' ? '碎碎念' : (item.section === 'weekly' ? '周刊' : (item.section === 'posts' ? '文章' : '页面'));
         return '<a class="search-result-item" href="' + escapeHtml(item.url) + '">' +
           '<div class="search-result-title"><span class="search-badge">' + badge + '</span><span>' + escapeHtml(item.title) + '</span></div>' +
           '<div class="search-result-snippet">' + escapeHtml(item.content || '') + '</div>' +

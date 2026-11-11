@@ -27,15 +27,11 @@
   data-likes="{{ $likes }}"
   data-search="{{ lower ($plain) }} {{ range $page.Params.tags }}#{{ lower . }} {{ end }}"
 >
-  <div class="note-meta">
-    <img class="note-avatar no-zoom" src="{{ strings.TrimPrefix "/" $page.Site.Params.avatar | relURL }}" width="20" height="20" alt="">
-    <span class="note-name">{{ $page.Site.Params.author }}</span>
-    <span class="note-dot"> · </span>
+  <div class="note-head">
     <a class="note-date" href="{{ $page.RelPermalink }}">
-      <time datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ $page.Date.Format "2006-01-02" }}</time>
+      <time datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ $page.Date.Format "2006-01-02 15:04" }}</time>
     </a>
-    <span class="note-dot"> · </span>
-    <a class="note-cat" href="{{ printf "notes/?c=%s" $catKey | relURL }}" data-filter-cat="{{ $catKey }}">{{ $catName }}</a>
+    <a class="note-cat-pill" href="{{ printf "notes/?c=%s" $catKey | relURL }}" data-filter-cat="{{ $catKey }}">{{ $catName }}</a>
   </div>
 
   <div class="note-body">
@@ -44,7 +40,7 @@
       {{- if gt (len $parts) 1 -}}
         <div class="note-lead">
           {{ index $parts 0 | safeHTML }}
-          <button type="button" class="note-unfold" data-unfold>…展开全文</button>
+          <button type="button" class="note-unfold" data-unfold>展开全文 ↓</button>
         </div>
         <div class="note-rest">
           {{ index $parts 1 | safeHTML }}
@@ -74,6 +70,19 @@
         {{- end -}}
       </div>
     {{- end -}}
+  </div>
+
+  <div class="note-foot">
+    <div class="note-foot-left">
+      <button type="button" class="note-stat note-like-btn" data-like-id="{{ $slug }}" data-base-likes="{{ $likes }}" title="喜欢">
+        <svg aria-hidden="true"><use href="#ni-like"/></svg>
+        <span class="note-like-count">{{ $likes }}</span>
+      </button>
+      <button type="button" class="note-stat note-share" data-copy-url="{{ $page.Permalink }}" title="复制链接">
+        <svg aria-hidden="true"><use href="#ni-link"/></svg>
+        <span class="note-copy-label">链接</span>
+      </button>
+    </div>
 
     {{- with $page.Params.tags -}}
       <div class="note-tags">
@@ -82,16 +91,5 @@
         {{- end -}}
       </div>
     {{- end -}}
-  </div>
-
-  <div class="note-foot">
-    <button type="button" class="note-stat note-like-btn" data-like-id="{{ $slug }}" data-base-likes="{{ $likes }}" title="喜欢">
-      <svg aria-hidden="true"><use href="#ni-like"/></svg>
-      <span class="note-like-count">{{ $likes }}</span>
-    </button>
-    <button type="button" class="note-stat note-share" data-copy-url="{{ $page.Permalink }}" title="复制链接">
-      <svg aria-hidden="true"><use href="#ni-link"/></svg>
-      <span class="note-copy-label">分享</span>
-    </button>
   </div>
 </article>

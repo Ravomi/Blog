@@ -10,6 +10,8 @@
     {{- range $.Site.Params.postCategories -}}
       {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
     {{- end -}}
+  {{- else if eq .Section "weekly" -}}
+    {{- $catName = printf "第 %v 期" (.Params.issue | default 1) -}}
   {{- end -}}
   {{- $title := .Title -}}
   {{- if not $title -}}

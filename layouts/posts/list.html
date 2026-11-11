@@ -1,8 +1,12 @@
 {{ define "body_id" }}archive{{ end }}
 
 {{ define "main" }}
-<div class="archive">
-  <h1 class="visually-hidden">文章归档</h1>
+<div class="page-head">
+  <h1>文章归档</h1>
+  <p>长文与技术烘焙记录</p>
+</div>
+
+<div class="archive-card">
   <nav class="archive-cats" id="J_archive_cats" aria-label="分类">
     <button type="button" data-cat="" aria-pressed="true">全部</button>
     {{- range .Site.Params.postCategories -}}
