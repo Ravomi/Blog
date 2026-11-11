@@ -45,7 +45,7 @@
       </select>
 
       <button class="notes-find" id="J_notes_find" type="button" aria-label="搜索" aria-expanded="false" aria-controls="J_notes_q">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.4 10.4 3 3"/></svg>
+        <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="m10.4 10.4 3 3"/></svg>
       </button>
     </div>
 
@@ -91,5 +91,6 @@
 {{ end }}
 
 {{ define "scripts" }}
-<script src="{{ "js/notes.js" | relURL }}" defer></script>
+{{- $notesJs := resources.Get "js/notes.js" | minify | fingerprint -}}
+<script src="{{ $notesJs.RelPermalink }}" defer></script>
 {{ end }}

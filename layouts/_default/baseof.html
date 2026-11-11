@@ -24,7 +24,8 @@
 
   <link rel="preload" href="{{ "css/genjyuu.css" | relURL }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ "css/genjyuu.css" | relURL }}"></noscript>
-  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  {{- $css := resources.Get "css/main.css" | minify | fingerprint -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 </head>
 <body id="{{ block "body_id" . }}page{{ end }}" data-baseurl="{{ "" | relURL }}">
   {{ partial "header.html" . }}
@@ -40,7 +41,8 @@
     <img id="J_lightbox_img" src="" alt="">
   </div>
 
-  <script src="{{ "js/site.js" | relURL }}" defer></script>
+  {{- $siteJs := resources.Get "js/site.js" | minify | fingerprint -}}
+  <script src="{{ $siteJs.RelPermalink }}" defer></script>
   {{ block "scripts" . }}{{ end }}
 </body>
 </html>

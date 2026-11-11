@@ -23,5 +23,6 @@
 {{ end }}
 
 {{ define "scripts" }}
-<script src="{{ "js/notes.js" | relURL }}" defer></script>
+{{- $notesJs := resources.Get "js/notes.js" | minify | fingerprint -}}
+<script src="{{ $notesJs.RelPermalink }}" defer></script>
 {{ end }}
