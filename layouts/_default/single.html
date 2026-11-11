@@ -17,7 +17,7 @@
             {{- if eq .key $catKey -}}{{- $catName = .name -}}{{- end -}}
           {{- end -}}
           <span>·</span>
-          <a href="/posts/#{{ $catKey }}">{{ $catName }}</a>
+          <a href="{{ printf "posts/#%s" $catKey | relURL }}">{{ $catName }}</a>
         {{- end -}}
         <span>·</span>
         <span>约 {{ .ReadingTime }} 分钟</span>
@@ -36,7 +36,7 @@
 {{- if or .PrevInSection .NextInSection -}}
 <div class="read-more">
   <div class="read-more-header">
-    <a href="/posts/" class="read-more-btn">阅读更多</a>
+    <a href="{{ "posts/" | relURL }}" class="read-more-btn">阅读更多</a>
   </div>
   <div class="read-more-list">
     {{- with .NextInSection -}}

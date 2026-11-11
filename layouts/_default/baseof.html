@@ -17,16 +17,16 @@
   <meta property="og:site_name" content="{{ .Site.Title }}">
 
   <link rel="canonical" href="{{ .Permalink }}">
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg">
-  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Feed" href="/feed.xml">
-  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Notes" href="/notes/feed.xml">
+  <link rel="icon" type="image/svg+xml" href="{{ "images/favicon.svg" | relURL }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Feed" href="{{ "feed.xml" | relURL }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} Notes" href="{{ "notes/feed.xml" | relURL }}">
 
   <link rel="preconnect" href="https://gw.alipayobjects.com" crossorigin>
-  <link rel="preload" href="/css/jinkai.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="/css/jinkai.css"></noscript>
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="preload" href="{{ "css/jinkai.css" | relURL }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ "css/jinkai.css" | relURL }}"></noscript>
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 </head>
-<body id="{{ block "body_id" . }}page{{ end }}">
+<body id="{{ block "body_id" . }}page{{ end }}" data-baseurl="{{ "" | relURL }}">
   {{ partial "header.html" . }}
   {{ partial "banner.html" . }}
 
@@ -41,7 +41,7 @@
     <img id="J_lightbox_img" src="" alt="">
   </div>
 
-  <script src="/js/site.js" defer></script>
+  <script src="{{ "js/site.js" | relURL }}" defer></script>
   {{ block "scripts" . }}{{ end }}
 </body>
 </html>

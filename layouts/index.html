@@ -8,7 +8,7 @@
 <section class="home-notes-card" aria-label="最新碎碎念">
   <div class="home-notes-head">
     <h2>刚出炉的碎碎念</h2>
-    <a href="/notes/">查看全部 ({{ len $notes }}) →</a>
+    <a href="{{ "notes/" | relURL }}">查看全部 ({{ len $notes }}) →</a>
   </div>
   <div class="home-notes-items">
     {{- range first 3 ($notes.ByDate.Reverse) -}}

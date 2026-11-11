@@ -258,7 +258,8 @@
 
     var loadIndex = function () {
       if (indexData) return Promise.resolve(indexData);
-      return fetch('/index.json')
+      var base = (document.body && document.body.dataset.baseurl) || '/';
+      return fetch(base.replace(/\/?$/, '/') + 'index.json')
         .then(function (r) { return r.json(); })
         .then(function (data) { indexData = data; return data; })
         .catch(function () { indexData = []; return []; });

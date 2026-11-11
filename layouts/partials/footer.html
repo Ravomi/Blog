@@ -8,13 +8,13 @@
     </a>
     {{ end }}
 
-    <a href="/feed.xml" rel="nofollow" target="_blank" class="social-icon" aria-label="RSS Feed">
+    <a href="{{ "feed.xml" | relURL }}" rel="nofollow" target="_blank" class="social-icon" aria-label="RSS Feed">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M3 3c9.941 0 18 8.059 18 18h-3c0-8.284-6.716-15-15-15V3Zm0 7c6.075 0 11 4.925 11 11h-3c0-4.418-3.582-8-8-8v-3Zm0 7a4 4 0 0 1 4 4H3v-4Z"/>
       </svg>
     </a>
 
-    <a href="/about/" class="social-icon" aria-label="{{ .Site.Title }}">
+    <a href="{{ "about/" | relURL }}" class="social-icon" aria-label="{{ .Site.Title }}">
       <span aria-hidden="true">🍞</span>
       <span class="repo-time">{{ .Site.Params.since }}~{{ now.Format "2006" }}</span>
     </a>

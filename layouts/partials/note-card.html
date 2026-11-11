@@ -28,14 +28,14 @@
   data-search="{{ lower ($plain) }} {{ range $page.Params.tags }}#{{ lower . }} {{ end }}"
 >
   <div class="note-meta">
-    <img class="note-avatar no-zoom" src="{{ $page.Site.Params.avatar }}" width="20" height="20" alt="">
+    <img class="note-avatar no-zoom" src="{{ strings.TrimPrefix "/" $page.Site.Params.avatar | relURL }}" width="20" height="20" alt="">
     <span class="note-name">{{ $page.Site.Params.author }}</span>
     <span class="note-dot"> · </span>
     <a class="note-date" href="{{ $page.RelPermalink }}">
       <time datetime="{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ $page.Date.Format "2006-01-02" }}</time>
     </a>
     <span class="note-dot"> · </span>
-    <a class="note-cat" href="/notes/?c={{ $catKey }}" data-filter-cat="{{ $catKey }}">{{ $catName }}</a>
+    <a class="note-cat" href="{{ printf "notes/?c=%s" $catKey | relURL }}" data-filter-cat="{{ $catKey }}">{{ $catName }}</a>
   </div>
 
   <div class="note-body">
@@ -57,7 +57,7 @@
     {{- end -}}
 
     {{- with $page.Params.article -}}
-      <a class="note-article" href="{{ .url }}">
+      <a class="note-article" href="{{ strings.TrimPrefix "/" .url | relURL }}">
         <strong>{{ .title }}</strong>
         {{- with .summary -}}<span>{{ . }}</span>{{- end -}}
       </a>
@@ -78,7 +78,7 @@
     {{- with $page.Params.tags -}}
       <div class="note-tags">
         {{- range . -}}
-          <a class="note-tag" href="/notes/?tag={{ . }}" data-filter-tag="{{ . }}">#{{ . }}</a>
+          <a class="note-tag" href="{{ printf "notes/?tag=%s" . | relURL }}" data-filter-tag="{{ . }}">#{{ . }}</a>
         {{- end -}}
       </div>
     {{- end -}}
